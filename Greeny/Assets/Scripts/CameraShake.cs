@@ -5,12 +5,12 @@ public class CameraShake : MonoBehaviour
 {
     private void OnEnable()
     {
-        Ball.ballLost += ShakeCamera;
+        Ball.ballSun += ShakeCamera;
     }
 
     private void OnDisable()
     {
-        Ball.ballLost -= ShakeCamera;
+        Ball.ballSun -= ShakeCamera;
     }
 
     private void ShakeCamera()

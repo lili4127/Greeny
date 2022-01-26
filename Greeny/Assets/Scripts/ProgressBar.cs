@@ -28,17 +28,11 @@ public class ProgressBar : MonoBehaviour
         }
     }
 
-    //private void Start()
-    //{
-    //    StartCoroutine(FlashBarCo());
-    //}
-
     public void ButtonPressed()
     {
         isFlashing = false;
         buttonPressed.Invoke(buttonNumber);
-
-}
+    }
 
     IEnumerator FlashBarCo()
     {

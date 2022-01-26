@@ -6,9 +6,9 @@ public class GreenhouseGas : MonoBehaviour
     [SerializeField] private BallPool ballPool;
     private Rigidbody2D rb;
     private Animator anim;
-    private Vector3 direction;
+    [SerializeField] private float speed = 10f;
+    private float movementInput;
     public bool gasActive;
-    [SerializeField] private float speed = 5f;
     public static event Action gasLaugh;
 
     // Start is called before the first frame update
@@ -16,7 +16,6 @@ public class GreenhouseGas : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        direction = transform.right;
         gasActive = false;
     }
 
@@ -25,19 +24,16 @@ public class GreenhouseGas : MonoBehaviour
         Ball.ballHitGas += GasActivated;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        if (!gasActive)
-        {
-            rb.MovePosition(transform.position + direction * speed * Time.deltaTime);
-        }
+        movementInput = Input.GetAxis("Horizontal");
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void FixedUpdate()
     {
-        if (collision.collider.TryGetComponent<SideWall>(out SideWall s))
+        if (movementInput != 0 && !gasActive)
         {
-            direction = -direction;
+            rb.MovePosition(transform.position + transform.right * movementInput * speed * Time.fixedDeltaTime);
         }
     }
 

@@ -4,66 +4,32 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private GameObject HUD;
     [SerializeField] private BallPool ballPool;
+    public bool gamePlaying { get; private set; }
     private bool isPaused = false;
-    private float difficulty;
 
     [Space]
     [Header("Backgrounds")]
-    [SerializeField] private int playerStrikes;
+    [SerializeField] private int playerCounter;
     [SerializeField] private int activeBackground;
     [SerializeField] private SpriteRenderer[] backgrounds;
     private Color targetColor = new Color(1, 1, 1, 0);
 
-    [Header("Panels")]
+    [Header("Canvas")]
+    [SerializeField] private GameObject pauseButton;
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject gameOverPanel;
-
-    [Header("Texts")]
     [SerializeField] private TextMeshProUGUI countdownText;
-    [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private TextMeshProUGUI finalScoreText;
-    [SerializeField] private TextMeshProUGUI highScoreText;
-    public bool timerGoing { get; private set; }
-    private float score = 0f;
-    private float pointsPerSecond = 10;
-
-    [Header("Tutorial")]
-    [SerializeField] private GameObject tutorialPanel;
-    public bool tutorial { get; private set; }
-    [SerializeField] private int tutorialState;
-
-    private void Awake()
-    {
-        if(PlayerPrefs.GetInt("tutorial", 0) == 1)
-        {
-            tutorial = true;
-        }
-
-        difficulty = PlayerPrefs.GetFloat("difficulty", 3f);
-    }
 
     private void OnEnable()
     {
-        Ball.ballLost += UpdateStrikes;
-        Ball.ballSaved += UpdateScore;
+        Ball.ballGas += UpdateCounter;
     }
 
     private void Start()
     {
-        if (!tutorial)
-        {
-            SetUpGame();
-            StartGame();
-        }
-
-        else
-        {
-            StartTutorial();
-            PlayerPrefs.SetInt("tutorial", 0);
-            PlayerPrefs.Save();
-        }
+        SetUpGame();
+        StartGame();
     }
 
     private void SetUpGame()
@@ -75,10 +41,7 @@ public class GameManager : MonoBehaviour
         }
         CleanBallsOffScreen();
         activeBackground = 0;
-        playerStrikes = 0;
-        timerGoing = false;
-        score = 0f;
-        scoreText.text = score.ToString();
+        playerCounter = 0;
     }
 
     private void StartGame()
@@ -104,82 +67,30 @@ public class GameManager : MonoBehaviour
         countdownText.text = "GO!";
         yield return new WaitForSeconds(1f);
         countdownText.gameObject.SetActive(false);
-        HUD.SetActive(true);
-        StartTimer();
+        pauseButton.SetActive(true);
+        gamePlaying = true;
         StartCoroutine(ServeBalls());
-    }
-
-    private void StartTimer()
-    {
-        timerGoing = true;
-        StartCoroutine(UpdateTimer());
-    }
-
-    IEnumerator UpdateTimer()
-    {
-        while (timerGoing)
-        {
-            score += pointsPerSecond * Time.deltaTime;
-            scoreText.text = Mathf.FloorToInt(score).ToString();
-            yield return null;
-        }
-    }
-
-    private void StopTimer()
-    {
-        timerGoing = false;
     }
 
     IEnumerator ServeBalls()
     {
-        while (timerGoing)
+        while (gamePlaying)
         {
             Ball b = ballPool.Get();
             b.gameObject.SetActive(true);
             b.Serve();
             
-            yield return new WaitForSeconds(difficulty);
+            yield return new WaitForSeconds(3f);
         }
     }
 
-    private void UpdateScore()
+    private void UpdateCounter()
     {
-        if (timerGoing)
+        if (gamePlaying)
         {
-            StartCoroutine(PulseTextCo());
-        }
-    }
+            playerCounter++;
 
-    IEnumerator PulseTextCo()
-    {
-        for (float i = 1f; i <= 1.2f; i += 0.05f)
-        {
-            scoreText.rectTransform.localScale = new Vector3(i, i, i);
-            yield return new WaitForEndOfFrame();
-        }
-
-        scoreText.rectTransform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
-        scoreText.color = Color.green;
-        score += 50;
-        scoreText.text = score.ToString();
-
-        for (float i = 1.2f; i >= 1f; i -= 0.05f)
-        {
-            scoreText.rectTransform.localScale = new Vector3(i, i, i);
-            yield return new WaitForEndOfFrame();
-        }
-
-        scoreText.rectTransform.localScale = new Vector3(1f, 1f, 1f);
-        scoreText.color = Color.white;
-    }
-
-    private void UpdateStrikes()
-    {
-        if (timerGoing)
-        {
-            playerStrikes++;
-
-            if (playerStrikes % 5 == 0 && activeBackground <= 3)
+            if (playerCounter % 5 == 0 && activeBackground <= 3)
             {
                 if (activeBackground == 3)
                 {
@@ -211,46 +122,28 @@ public class GameManager : MonoBehaviour
 
     private void LoseGame()
     {
-        HUD.SetActive(false);
+        pauseButton.SetActive(false);
         CleanBallsOffScreen();
-        StopTimer();
-        SetHighScore();
+        gamePlaying = false;
         gameOverPanel.SetActive(true);
-    }
-
-    private void SetHighScore()
-    {
-        if (PlayerPrefs.GetInt("highscore", 0) < Mathf.FloorToInt(score))
-        {
-            finalScoreText.text = "New High Score!";
-            highScoreText.text = scoreText.text;
-            PlayerPrefs.SetInt("highscore", Mathf.FloorToInt(score));
-            PlayerPrefs.Save();
-        }
-
-        else
-        {
-            finalScoreText.text = "Final Score: " + scoreText.text;
-            highScoreText.text = "High Score: " + PlayerPrefs.GetInt("highscore", 0).ToString();
-        }
     }
 
     public void PauseGame()
     {
         isPaused = !isPaused;
-        HUD.SetActive(!isPaused);
+        pauseButton.SetActive(!isPaused);
 
         if (isPaused)
         {
             Time.timeScale = 0f;
-            StopTimer();
+            gamePlaying = false;
             pausePanel.SetActive(true);
         }
 
         else
         {
             Time.timeScale = 1f;
-            StartTimer();
+            gamePlaying = true;
             pausePanel.SetActive(false);
         }
     }
@@ -272,42 +165,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void StartTutorial()
-    {
-        tutorialPanel.SetActive(true);
-        tutorialState = 0;
-        tutorialPanel.transform.GetChild(tutorialState).gameObject.SetActive(true);
-    }
-
-    public void TutorialStep(int i)
-    {
-        tutorialPanel.transform.GetChild(tutorialState).gameObject.SetActive(false);
-        tutorialState += i;
-
-        if (tutorialState <= 0)
-        {
-            tutorialState = 0;
-        }
-
-        if (tutorialState >= 6)
-        {
-            tutorialState = 6;
-        }
-
-        tutorialPanel.transform.GetChild(tutorialState).gameObject.SetActive(true);
-    }
-
-    public void PlayGame()
-    {
-        HUD.SetActive(false);
-        tutorialPanel.SetActive(false);
-        RestartGame();
-        tutorial = false;
-    }
-
     private void OnDisable()
     {
-        Ball.ballLost -= UpdateStrikes;
-        Ball.ballSaved -= UpdateScore;
+        Ball.ballGas -= UpdateCounter;
     }
 }

@@ -8,18 +8,43 @@ public class EMPanel : MonoBehaviour
     private Color[] colors = new Color[] {Color.red, Color.yellow, Color.green, Color.white, Color.black, Color.magenta, Color.cyan, Color.white };
     private Color32[] rainbowColors = new Color32[] {  Color.red, new Color(1, 0.5f, 0, 1), Color.yellow, Color.green, Color.blue, new Color(0.3f, 0, 0.5f, 1), new Color(0.6f, 0, 0.8f, 1) };
     private Color startColor = new Color(1, 1, 1, 0);
+    private LineRenderer lineRenderer;
+    [SerializeField] private int points;
+    [SerializeField] private int amplitude;
 
     private void Awake()
     {
         ResetTexts();
+        lineRenderer = GetComponentInChildren<LineRenderer>();
     }
 
     private void OnEnable()
     {
+
+        StartCoroutine(DrawWaveCo());
+
         //draw line and at each interval fade in text;
         for(int i = 0; i < texts.Length; i++)
         {
             StartCoroutine(FadeInTextCo(texts[i], Color.white, 1.5f, i));
+        }
+    }
+
+    IEnumerator DrawWaveCo()
+    {
+        RectTransform spaceToDraw = lineRenderer.gameObject.GetComponent<RectTransform>();
+        float xStart = Camera.main.ScreenToWorldPoint(Vector3.zero).x;
+        float xFinish = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width,0,0)).x;
+        float k = 2 * Mathf.PI;
+        lineRenderer.positionCount = points;
+
+        for (int currentPoint = 0; currentPoint < lineRenderer.positionCount; currentPoint++)
+        {
+            float progress = (float)currentPoint / (points - 1);
+            float x = Mathf.Lerp(xStart, xFinish, progress);
+            float y = amplitude * Mathf.Sin(k * x);
+            lineRenderer.SetPosition(currentPoint, new Vector3(x, y, 0));
+            yield return null;
         }
     }
 

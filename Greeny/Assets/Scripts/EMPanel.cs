@@ -8,9 +8,12 @@ public class EMPanel : MonoBehaviour
     private Color[] colors = new Color[] {Color.red, Color.yellow, Color.green, Color.white, Color.black, Color.magenta, Color.cyan, Color.white };
     private Color32[] rainbowColors = new Color32[] {  Color.red, new Color(1, 0.5f, 0, 1), Color.yellow, Color.green, Color.blue, new Color(0.3f, 0, 0.5f, 1), new Color(0.6f, 0, 0.8f, 1) };
     private Color startColor = new Color(1, 1, 1, 0);
+
     private LineRenderer lineRenderer;
-    [SerializeField] private int points;
     [SerializeField] private int amplitude;
+
+    //lower makes longer wavelengths
+    [SerializeField] private float tauModifier = 0.75f;
 
     private void Awake()
     {
@@ -21,7 +24,7 @@ public class EMPanel : MonoBehaviour
     private void OnEnable()
     {
 
-        StartCoroutine(DrawWaveCo());
+        StartCoroutine(DrawWaveCo(5f));
 
         //draw line and at each interval fade in text;
         for(int i = 0; i < texts.Length; i++)
@@ -30,20 +33,20 @@ public class EMPanel : MonoBehaviour
         }
     }
 
-    IEnumerator DrawWaveCo()
+    IEnumerator DrawWaveCo(float duration)
     {
-        RectTransform spaceToDraw = lineRenderer.gameObject.GetComponent<RectTransform>();
         float xStart = Camera.main.ScreenToWorldPoint(Vector3.zero).x;
-        float xFinish = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width,0,0)).x;
-        float k = 2 * Mathf.PI;
-        lineRenderer.positionCount = points;
+        float xFinish = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x;
+        lineRenderer.positionCount = 0;
+        float time = 0f;
 
-        for (int currentPoint = 0; currentPoint < lineRenderer.positionCount; currentPoint++)
+        while(time < duration)
         {
-            float progress = (float)currentPoint / (points - 1);
-            float x = Mathf.Lerp(xStart, xFinish, progress);
-            float y = amplitude * Mathf.Sin(k * x);
-            lineRenderer.SetPosition(currentPoint, new Vector3(x, y, 0));
+            lineRenderer.positionCount++;
+            float x = Mathf.Lerp(xStart, xFinish, time/duration);
+            float y = amplitude * Mathf.Cos(tauModifier * Mathf.PI * x);
+            lineRenderer.SetPosition(lineRenderer.positionCount - 1, new Vector3(x, y + 3, 0));
+            time += Time.deltaTime;
             yield return null;
         }
     }
@@ -132,5 +135,7 @@ public class EMPanel : MonoBehaviour
     private void OnDisable()
     {
         ResetTexts();
+        StopAllCoroutines();
+        lineRenderer.positionCount = 0;
     }
 }

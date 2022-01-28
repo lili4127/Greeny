@@ -4,16 +4,12 @@ using TMPro;
 
 public class EMPanel : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI[] texts;
-    private Color[] colors = new Color[] {Color.red, Color.yellow, Color.green, Color.white, Color.black, Color.magenta, Color.cyan, Color.white };
+    [SerializeField] private float duration = 5f;
+    [SerializeField] private TextMeshProUGUI[] waveNames;
+    [SerializeField] private TextMeshProUGUI eMText;
     private Color32[] rainbowColors = new Color32[] {  Color.red, new Color(1, 0.5f, 0, 1), Color.yellow, Color.green, Color.blue, new Color(0.3f, 0, 0.5f, 1), new Color(0.6f, 0, 0.8f, 1) };
     private Color startColor = new Color(1, 1, 1, 0);
-
     private LineRenderer lineRenderer;
-    [SerializeField] private int amplitude;
-
-    //lower makes longer wavelengths
-    [SerializeField] private float tauModifier = 0.75f;
 
     private void Awake()
     {
@@ -24,27 +20,26 @@ public class EMPanel : MonoBehaviour
     private void OnEnable()
     {
 
-        StartCoroutine(DrawWaveCo(5f));
-
-        //draw line and at each interval fade in text;
-        for(int i = 0; i < texts.Length; i++)
-        {
-            StartCoroutine(FadeInTextCo(texts[i], Color.white, 1.5f, i));
-        }
+        StartCoroutine(DrawWaveCo(duration));
+        StartCoroutine(FadeInTexts(duration));
     }
 
     IEnumerator DrawWaveCo(float duration)
     {
         float xStart = Camera.main.ScreenToWorldPoint(Vector3.zero).x;
         float xFinish = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x;
+        float tauStart = 0.75f;
+        float tauFinish = 2.5f;
         lineRenderer.positionCount = 0;
         float time = 0f;
+        float amplitude = 1f;
 
         while(time < duration)
         {
             lineRenderer.positionCount++;
             float x = Mathf.Lerp(xStart, xFinish, time/duration);
-            float y = amplitude * Mathf.Cos(tauModifier * Mathf.PI * x);
+            float tau = Mathf.Lerp(tauStart, tauFinish, time / duration);
+            float y = amplitude * Mathf.Cos(tau * Mathf.PI * x);
             lineRenderer.SetPosition(lineRenderer.positionCount - 1, new Vector3(x, y + 3, 0));
             time += Time.deltaTime;
             yield return null;
@@ -79,7 +74,18 @@ public class EMPanel : MonoBehaviour
         }
     }
 
-    IEnumerator FadeInTextCo(TextMeshProUGUI t, Color endValue, float duration, int index)
+    IEnumerator FadeInTexts(float duration)
+    {
+        for(int i = 0; i < waveNames.Length; i++)
+        {
+            StartCoroutine(FadeInTextCo(waveNames[i], Color.white, 0.25f));
+            yield return new WaitForSeconds(duration / waveNames.Length);
+        }
+
+        StartCoroutine(FadeInTextCo(eMText, Color.white, 0.5f));
+    }
+
+    IEnumerator FadeInTextCo(TextMeshProUGUI t, Color endValue, float duration)
     {
         float time = 0;
         Color startValue = t.color;
@@ -92,15 +98,15 @@ public class EMPanel : MonoBehaviour
         }
 
         t.color = endValue;
-        PulseText(t, index);
+        PulseText(t);
     }
 
-    private void PulseText(TextMeshProUGUI t, int index)
+    private void PulseText(TextMeshProUGUI t)
     {
-        StartCoroutine(PulseTextCo(t, index));
+        StartCoroutine(PulseTextCo(t));
     }
 
-    IEnumerator PulseTextCo(TextMeshProUGUI t, int index)
+    IEnumerator PulseTextCo(TextMeshProUGUI t)
     {
         for (float i = 1f; i <= 1.1f; i += 0.005f)
         {
@@ -109,11 +115,11 @@ public class EMPanel : MonoBehaviour
         }
 
         t.rectTransform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
-        t.color = colors[index];
-        if (index == 3)
+
+        if(t.gameObject.name.Equals("VisibleText"))
         {
-            StartCoroutine(RainbowTextCo(t, 1.5f));
-        }
+            StartCoroutine(RainbowTextCo(t, 1f));
+        }        
 
         for (float i = 1.1f; i >= 1f; i -= 0.005f)
         {
@@ -126,10 +132,12 @@ public class EMPanel : MonoBehaviour
 
     private void ResetTexts()
     {
-        foreach (TextMeshProUGUI t in texts)
+        foreach (TextMeshProUGUI t in waveNames)
         {
             t.color = startColor;
         }
+
+        eMText.color = startColor;
     }
 
     private void OnDisable()

@@ -9,41 +9,15 @@ public class EMPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI eMText;
     private Color32[] rainbowColors = new Color32[] {  Color.red, new Color(1, 0.5f, 0, 1), Color.yellow, Color.green, Color.blue, new Color(0.3f, 0, 0.5f, 1), new Color(0.6f, 0, 0.8f, 1) };
     private Color startColor = new Color(1, 1, 1, 0);
-    private LineRenderer lineRenderer;
 
     private void Awake()
     {
         ResetTexts();
-        lineRenderer = GetComponentInChildren<LineRenderer>();
     }
 
     private void OnEnable()
     {
-
-        StartCoroutine(DrawWaveCo(duration));
         StartCoroutine(FadeInTexts(duration));
-    }
-
-    IEnumerator DrawWaveCo(float duration)
-    {
-        float xStart = Camera.main.ScreenToWorldPoint(Vector3.zero).x;
-        float xFinish = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x;
-        float tauStart = 0.75f;
-        float tauFinish = 2.5f;
-        lineRenderer.positionCount = 0;
-        float time = 0f;
-        float amplitude = 1f;
-
-        while(time < duration)
-        {
-            lineRenderer.positionCount++;
-            float x = Mathf.Lerp(xStart, xFinish, time/duration);
-            float tau = Mathf.Lerp(tauStart, tauFinish, time / duration);
-            float y = amplitude * Mathf.Cos(tau * Mathf.PI * x);
-            lineRenderer.SetPosition(lineRenderer.positionCount - 1, new Vector3(x, y + 3, 0));
-            time += Time.deltaTime;
-            yield return null;
-        }
     }
 
     private IEnumerator RainbowTextCo(TextMeshProUGUI t, float duration)
@@ -144,6 +118,5 @@ public class EMPanel : MonoBehaviour
     {
         ResetTexts();
         StopAllCoroutines();
-        lineRenderer.positionCount = 0;
     }
 }

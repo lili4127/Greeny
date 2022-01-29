@@ -1907,10 +1907,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: c04a643a98e554de8a0a1f145afb74d7, type: 3}
-  m_Type: 0
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
@@ -3505,6 +3505,7 @@ MonoBehaviour:
   - {fileID: 727648842}
   - {fileID: 1582599668}
   eMText: {fileID: 1507474712}
+  eMImage: {fileID: 747114774}
 --- !u!1 &1263877490
 GameObject:
   m_ObjectHideFlags: 0

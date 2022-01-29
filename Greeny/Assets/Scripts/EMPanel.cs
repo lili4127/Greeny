@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class EMPanel : MonoBehaviour
 {
+    [SerializeField] private TextEffect textEffect;
     [SerializeField] private float duration = 5f;
     [SerializeField] private TextMeshProUGUI[] waveNames;
     [SerializeField] private TextMeshProUGUI eMText;
@@ -40,32 +41,11 @@ public class EMPanel : MonoBehaviour
     {
         for(int i = 0; i < waveNames.Length; i++)
         {
-            StartCoroutine(FadeInTextCo(waveNames[i], Color.white, 0.25f));
+            StartCoroutine(textEffect.FadeInTextCo(waveNames[i], Color.white, 0.25f));
             yield return new WaitForSeconds(duration / waveNames.Length);
         }
 
-        StartCoroutine(FadeInTextCo(eMText, Color.white, 0.5f));
-    }
-
-    IEnumerator FadeInTextCo(TextMeshProUGUI t, Color endValue, float duration)
-    {
-        float time = 0;
-        Color startValue = t.color;
-
-        while (time < duration)
-        {
-            t.color = Color.Lerp(startValue, endValue, time / duration);
-            time += Time.deltaTime;
-            yield return null;
-        }
-
-        t.color = endValue;
-        PulseText(t);
-    }
-
-    private void PulseText(TextMeshProUGUI t)
-    {
-        StartCoroutine(PulseTextCo(t));
+        StartCoroutine(textEffect.FadeInTextCo(eMText, Color.white, 0.5f));
     }
 
     private IEnumerator RainbowTextCo(TextMeshProUGUI t, float duration)
@@ -94,30 +74,6 @@ public class EMPanel : MonoBehaviour
             }
             going = false;
         }
-    }
-
-    IEnumerator PulseTextCo(TextMeshProUGUI t)
-    {
-        for (float i = 1f; i <= 1.1f; i += 0.005f)
-        {
-            t.rectTransform.localScale = new Vector3(i, i, i);
-            yield return new WaitForEndOfFrame();
-        }
-
-        t.rectTransform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
-
-        if(t.gameObject.name.Equals("VisibleText"))
-        {
-            StartCoroutine(RainbowTextCo(t, 1f));
-        }        
-
-        for (float i = 1.1f; i >= 1f; i -= 0.005f)
-        {
-            t.rectTransform.localScale = new Vector3(i, i, i);
-            yield return new WaitForEndOfFrame();
-        }
-
-        t.rectTransform.localScale = new Vector3(1f, 1f, 1f);
     }
 
     private void ResetPanel()

@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
-        Ball.ballGas += UpdateCounter;
+        Ball.ballAbsorbed += UpdateCounter;
     }
 
     private void Start()
@@ -167,6 +167,6 @@ public class GameManager : MonoBehaviour
 
     private void OnDisable()
     {
-        Ball.ballGas -= UpdateCounter;
+        Ball.ballAbsorbed -= UpdateCounter;
     }
 }

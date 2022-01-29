@@ -14,10 +14,8 @@ public class Ball : MonoBehaviour
 
     [SerializeField] private Sprite[] ballSprites;
     private SpriteRenderer spriteRenderer;
-    private bool gasBall = false;
 
-    public static event System.Action ballSun;
-    public static event System.Action ballGas;
+    public static event System.Action ballAbsorbed;
     public static event System.Action ballBounced;
     public static event System.Action ballHitGas;
 
@@ -60,17 +58,8 @@ public class Ball : MonoBehaviour
 
         if (collision.TryGetComponent<BottomWall>(out BottomWall b))
         {
-            if (gasBall)
-            {
-                ballGas?.Invoke();
-                ResetBall();
-            }
-
-            else
-            {
-                ballSun?.Invoke();
-                BallAbsorbed();
-            }
+            ballAbsorbed?.Invoke();
+            BallAbsorbed();
         }
 
         if (collision.TryGetComponent<GreenhouseGas>(out GreenhouseGas g))
@@ -105,7 +94,6 @@ public class Ball : MonoBehaviour
     public void ServeGasBall(Position p)
     {
         SetColor(4);
-        gasBall = true;
 
         switch (p)
         {
@@ -128,7 +116,6 @@ public class Ball : MonoBehaviour
     public void ResetBall()
     {
         this.gameObject.SetActive(false);
-        gasBall = false;
         transform.position = transform.parent.transform.position;
         rb.velocity = Vector2.zero;
         bp.ReturnToPool(this);

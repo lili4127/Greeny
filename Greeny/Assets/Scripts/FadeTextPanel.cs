@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-public class AlbedoPanel2 : MonoBehaviour
+public class FadeTextPanel : MonoBehaviour
 {
     [SerializeField] private TextEffect textEffect;
     private TextMeshProUGUI activeText;

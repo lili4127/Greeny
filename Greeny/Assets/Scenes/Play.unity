@@ -947,8 +947,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4b9d1bcd921d45f3845dec8b08983ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ballSun: {fileID: 8300000, guid: 6839caf92764348b99f66e3d3067fb40, type: 3}
-  ballGas: {fileID: 8300000, guid: 2bbc13986bfad4df2b8b5b29ad0f15ed, type: 3}
+  ballAbsorbed: {fileID: 8300000, guid: 6839caf92764348b99f66e3d3067fb40, type: 3}
   ballBounce: {fileID: 8300000, guid: d6fb78be120ce43deb4980989df8ddf8, type: 3}
   gasLaugh: {fileID: 8300000, guid: 8f2d3bee583c94ae5a3ef4d99425ae76, type: 3}
 --- !u!1 &344772148

@@ -5,17 +5,17 @@ public class CameraShake : MonoBehaviour
 {
     private void OnEnable()
     {
-        Ball.ballSun += ShakeCamera;
+        Ball.ballAbsorbed += ShakeCamera;
     }
 
     private void OnDisable()
     {
-        Ball.ballSun -= ShakeCamera;
+        Ball.ballAbsorbed -= ShakeCamera;
     }
 
     private void ShakeCamera()
     {
-        StartCoroutine(ShakeCo(0.25f, 0.15f));
+        StartCoroutine(ShakeCo(0.1f, 0.05f));
     }
 
     IEnumerator ShakeCo(float duration, float magnitude)

@@ -6,7 +6,7 @@ public class SFXManager : MonoBehaviour
 
     [Space]
     [Header("SFX")]
-    [SerializeField] private AudioClip ballSun;
+    [SerializeField] private AudioClip ballAbsorbed;
     [SerializeField] private AudioClip ballBounce;
     [SerializeField] private AudioClip gasLaugh;
 
@@ -17,7 +17,7 @@ public class SFXManager : MonoBehaviour
 
     private void OnEnable()
     {
-        Ball.ballSun += PlayBallSun;
+        Ball.ballAbsorbed += PlayBallAbsorbed;
         Ball.ballBounced += PlayBallBounce;
         GreenhouseGas.gasLaugh += PlayGasLaugh;
     }
@@ -27,9 +27,9 @@ public class SFXManager : MonoBehaviour
         audioSource.PlayOneShot(ballBounce, 0.25f);
     }
 
-    private void PlayBallSun()
+    private void PlayBallAbsorbed()
     {
-        audioSource.PlayOneShot(ballSun, 0.25f);
+        audioSource.PlayOneShot(ballAbsorbed, 0.25f);
     }
 
     private void PlayGasLaugh()
@@ -39,7 +39,7 @@ public class SFXManager : MonoBehaviour
 
     private void OnDisable()
     {
-        Ball.ballSun -= PlayBallSun;
+        Ball.ballAbsorbed -= PlayBallAbsorbed;
         Ball.ballBounced -= PlayBallBounce;
         GreenhouseGas.gasLaugh -= PlayGasLaugh;
     }

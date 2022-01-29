@@ -45,6 +45,7 @@ SpriteAtlas:
     packables:
     - {fileID: 2800000, guid: 98d20fe739e52024d8acf8e32bf24b1c, type: 3}
     - {fileID: 2800000, guid: 841ae3188ba4d9746ba4f4ed86597a98, type: 3}
+    - {fileID: 2800000, guid: a1e642ac4188cf544b455c79870d43f6, type: 3}
     - {fileID: 2800000, guid: f4eb375f3547746d5ba1f2a08921e44a, type: 3}
     - {fileID: 2800000, guid: a09dc5e3cea56421b80bc1df14c347f1, type: 3}
     - {fileID: 2800000, guid: 9cd6991b040b7fb40808e500b041d545, type: 3}
@@ -73,6 +74,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: e839e6693c344ad40a5952853a891866, type: 3}
   - {fileID: 21300000, guid: c398922a20f2f984db55718ac2c394f5, type: 3}
   - {fileID: 21300000, guid: 9cd6991b040b7fb40808e500b041d545, type: 3}
+  - {fileID: 21300000, guid: a1e642ac4188cf544b455c79870d43f6, type: 3}
   - {fileID: 21300000, guid: a1d9cb3eb505c114d8fa17fcbaeb157c, type: 3}
   - {fileID: 21300000, guid: 477e16ce3d75d124c8bd76f95fa08730, type: 3}
   - {fileID: 21300000, guid: f4eb375f3547746d5ba1f2a08921e44a, type: 3}
@@ -88,6 +90,7 @@ SpriteAtlas:
   - x
   - play
   - checkmark
+  - arrow_up
   - help
   - repeat
   - button_200

@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-public class AlbedoPanel : MonoBehaviour
+public class SubPanelManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI buttonText;
     private int panelActive = 0;

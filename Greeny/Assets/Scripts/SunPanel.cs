@@ -9,14 +9,13 @@ public class SunPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI sunText;
     [SerializeField] private Sprite[] ballSprites;
     [SerializeField] private Image ballImage;
-    private Color startColor = new Color(1, 1, 1, 0);
     private int sprite;
 
     private void Awake()
     {
         ballImage.sprite = ballSprites[0];
         sprite = 0;
-        sunText.color = startColor;
+        sunText.color = textEffect.transparent;
     }
 
     private void OnEnable()
@@ -39,6 +38,6 @@ public class SunPanel : MonoBehaviour
     private void OnDisable()
     {
         StopAllCoroutines();
-        sunText.color = startColor;
+        sunText.color = textEffect.transparent;
     }
 }

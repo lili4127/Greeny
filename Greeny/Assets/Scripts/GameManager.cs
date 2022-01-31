@@ -1,25 +1,30 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private BallPool ballPool;
+    [SerializeField] Slider healthbar;
+    public int worldHealth { get; private set; }
     public bool gamePlaying { get; private set; }
     private bool isPaused = false;
 
     [Space]
     [Header("Backgrounds")]
-    [SerializeField] private int playerCounter;
     [SerializeField] private int activeBackground;
     [SerializeField] private SpriteRenderer[] backgrounds;
     private Color targetColor = new Color(1, 1, 1, 0);
 
     [Header("Canvas")]
-    [SerializeField] private GameObject pauseButton;
+    [SerializeField] private GameObject HUD;
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private TextMeshProUGUI countdownText;
+
+    public static event System.Action<int> changePaddle;
 
     private void OnEnable()
     {
@@ -41,7 +46,9 @@ public class GameManager : MonoBehaviour
         }
         CleanBallsOffScreen();
         activeBackground = 0;
-        playerCounter = 0;
+        worldHealth = 20;
+        healthbar.value = worldHealth;
+        changePaddle?.Invoke(0);
     }
 
     private void StartGame()
@@ -67,20 +74,53 @@ public class GameManager : MonoBehaviour
         countdownText.text = "GO!";
         yield return new WaitForSeconds(1f);
         countdownText.gameObject.SetActive(false);
-        pauseButton.SetActive(true);
+        HUD.SetActive(true);
         gamePlaying = true;
-        StartCoroutine(ServeBalls());
+        StartCoroutine(SunEmit());
+        StartCoroutine(PlanetEmit());
     }
 
-    IEnumerator ServeBalls()
+    IEnumerator SunEmit()
     {
         while (gamePlaying)
         {
             Ball b = ballPool.Get();
             b.gameObject.SetActive(true);
-            b.Serve();
-            
+            b.SunEmit();
             yield return new WaitForSeconds(3f);
+        }
+    }
+
+    IEnumerator PlanetEmit()
+    {
+        while (gamePlaying)
+        {
+            List<int> planetPos = new List<int>() { 0, 1, 2 };
+            int r = planetPos[Random.Range(0, planetPos.Count)];
+            Ball b = ballPool.Get();
+            b.gameObject.SetActive(true);
+            b.PlanetEmit(r);
+            planetPos.Remove(r);
+
+            if (worldHealth >= 45)
+            {
+                int r2 = planetPos[Random.Range(0, planetPos.Count)];
+                Ball b2 = ballPool.Get();
+                b2.gameObject.SetActive(true);
+                b2.PlanetEmit(r2);
+                planetPos.Remove(r2);
+            }
+
+            if (worldHealth >= 70)
+            {
+                int r3 = planetPos[0];
+                Ball b3 = ballPool.Get();
+                b3.gameObject.SetActive(true);
+                b3.PlanetEmit(r3);
+
+            }
+
+            yield return new WaitForSeconds(5f);
         }
     }
 
@@ -88,9 +128,15 @@ public class GameManager : MonoBehaviour
     {
         if (gamePlaying)
         {
-            playerCounter++;
+            worldHealth++;
+            healthbar.value = worldHealth;
 
-            if (playerCounter % 5 == 0 && activeBackground <= 3)
+            if(worldHealth == 60)
+            {
+                changePaddle?.Invoke(1);
+            }
+
+            if (worldHealth % 20 == 0 && activeBackground <= 3)
             {
                 if (activeBackground == 3)
                 {
@@ -122,7 +168,7 @@ public class GameManager : MonoBehaviour
 
     private void LoseGame()
     {
-        pauseButton.SetActive(false);
+        HUD.SetActive(false);
         CleanBallsOffScreen();
         gamePlaying = false;
         gameOverPanel.SetActive(true);
@@ -131,7 +177,7 @@ public class GameManager : MonoBehaviour
     public void PauseGame()
     {
         isPaused = !isPaused;
-        pauseButton.SetActive(!isPaused);
+        HUD.SetActive(!isPaused);
 
         if (isPaused)
         {

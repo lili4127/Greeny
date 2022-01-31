@@ -57,6 +57,7 @@ public class GreenhouseGas : MonoBehaviour
         {
             Ball b = ballPool.Get();
             b.transform.position = transform.position;
+            b.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             b.gameObject.SetActive(true);
             b.ServeGasBall(p);
         }

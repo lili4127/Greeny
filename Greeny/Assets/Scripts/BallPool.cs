@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +9,7 @@ public class BallPool : MonoBehaviour
     private void Awake()
     {
         ballQueue = new Queue<Ball>();
-        AddBall(10);
+        AddBall(30);
     }
 
     public Ball Get()

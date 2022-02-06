@@ -73,6 +73,7 @@ public class Ball : MonoBehaviour
     public void SunEmit()
     {
         SetRandomColor();
+        spriteRenderer.color = new Color(1, 1, 1, 0.5f);
         transform.position = sun;
         rb.velocity = new Vector2(Random.Range(-7, 8), -8);
     }
@@ -95,6 +96,7 @@ public class Ball : MonoBehaviour
         }
 
         spriteRenderer.sprite = red;
+        spriteRenderer.color = Color.white;
         activeColor = 4;
         rb.velocity = new Vector2(0, 5);
     }
@@ -104,7 +106,6 @@ public class Ball : MonoBehaviour
         if (collision.TryGetComponent<SideWall>(out SideWall s))
         {
             rb.velocity = new Vector2(-rb.velocity.x, rb.velocity.y);
-            ballBounced?.Invoke();
         }
 
         if (collision.TryGetComponent<TopWall>(out TopWall t))
@@ -122,6 +123,7 @@ public class Ball : MonoBehaviour
         {
             if (activeColor < 4)
             {
+                ballBounced?.Invoke();
                 if (p.activePaddle == 0)
                 {
                     rb.velocity = new Vector2(0, 15);
@@ -193,6 +195,7 @@ public class Ball : MonoBehaviour
         transform.position = Vector3.zero;
         transform.localScale = new Vector3(1, 1, 1);
         rb.velocity = Vector2.zero;
+        spriteRenderer.color = Color.white;
         bp.ReturnToPool(this);
     }
 }

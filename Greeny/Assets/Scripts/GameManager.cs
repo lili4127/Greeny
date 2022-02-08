@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     private Color targetColor = new Color(1, 1, 1, 0);
 
     [Header("Canvas")]
+    [SerializeField] private GameObject playPanel;
     [SerializeField] private GameObject HUD;
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject gameOverPanel;
@@ -33,8 +34,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        SetUpGame();
-        StartGame();
+        playPanel.SetActive(true);
     }
 
     private void SetUpGame()
@@ -196,6 +196,7 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
+        playPanel.SetActive(false);
         pausePanel.SetActive(false);
         gameOverPanel.SetActive(false);
         StopAllCoroutines();

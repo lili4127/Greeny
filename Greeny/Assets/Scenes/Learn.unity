@@ -3173,12 +3173,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: The majority of energy that the Sun emits is in the visible part of the
-    EM spectrum. When this energy (light) reaches the Earth, some is reflected while
-    the rest is absorbed. Absorbed energy not only warms the surface of our planet,
-    but is also reemitted in the form of infrared radiation. Collectively, this process
-    of absorption, reflection and reemission establishes a global energy balance
-    which is fundamental to Earths climate system
+  m_text: The majority of energy that the Sun emits is shortwave radiation in the
+    visible part of the EM spectrum. When this energy (light) reaches the Earth,
+    some is reflected while the rest is absorbed. Absorbed energy not only warms
+    the surface of our planet, but is also reemitted in the form of longwave infrared
+    radiation. Collectively, this process of absorption, reflection and reemission
+    establishes a global energy balance which is fundamental to Earths climate system
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dec265cf934b04196af294a159127035, type: 2}
   m_sharedMaterial: {fileID: 7622364475437777530, guid: dec265cf934b04196af294a159127035, type: 2}
@@ -3993,10 +3993,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Greenhouse gasses are gasses that absorb and reemit radiation in all directions.
-    They live in our atmosphere absorbing and re-emitting the energy our planet emits
-    after absorbing it. This phenomenon, known as the greenhouse effect, contributes
-    greatly to the warming of our planet\u2019s surface and the lower atmosphere."
+  m_text: Greenhouse gasses live in our atmosphere absorbing and re-emitting the
+    longwave infrared radiation our planet emits in all directions. This phenomenon,
+    known as the greenhouse effect, contributes greatly to the warming of our planets
+    surface and the lower atmosphere.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dec265cf934b04196af294a159127035, type: 2}
   m_sharedMaterial: {fileID: 7622364475437777530, guid: dec265cf934b04196af294a159127035, type: 2}
@@ -4699,7 +4699,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Infared
+  m_text: Infrared
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dec265cf934b04196af294a159127035, type: 2}
   m_sharedMaterial: {fileID: 7622364475437777530, guid: dec265cf934b04196af294a159127035, type: 2}
@@ -5708,8 +5708,8 @@ MonoBehaviour:
   m_text: 'Electromagnetic (EM) radiation is energy that can travel and spread in
     the form of waves. For example, visible light from a lamp, and radio waves from
     a radio station, are 2 types of EM radiation. Waves are classified on a spectrum
-    from short to long waves: Gamma rays, X-rays, ultraviolet, visible, infrared,
-    microwave, and radio waves.'
+    from long to short waves: Radio waves, Microwaves, Infrared, Visible, Ultraviolet,
+    X-Ray, Gamma'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dec265cf934b04196af294a159127035, type: 2}
   m_sharedMaterial: {fileID: 7622364475437777530, guid: dec265cf934b04196af294a159127035, type: 2}
@@ -7138,14 +7138,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Two of the most important greenhouse gasses are carbon dioxide (CO2) and
+  m_text: Two of the most important greenhouse gasses are carbon dioxide (CO2) and
     methane (CH4) which are created through the burning of fossil fuels such as coal
     and oil. The more humans continue to use these fuels, the more gasses fill the
-    atmosphere to trap and redisperse emitted radiation. This creates a feedback
-    loop where radiation is captured and re-emitted, the planet heats up, ice melts,
-    reflectivity lowers, and absorption and emission increase. Many animals, including
-    ourselves, already struggle to survive. This loop which steadily raises the planet\u2019s
-    temperature over time will eventually make survival impossible."
+    atmosphere to trap and redisperse emitted radiation. Eventually, this feedback
+    loop will heat up our planet to the point where life will not be able to survive.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dec265cf934b04196af294a159127035, type: 2}
   m_sharedMaterial: {fileID: 7622364475437777530, guid: dec265cf934b04196af294a159127035, type: 2}
